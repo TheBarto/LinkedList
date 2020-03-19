@@ -1,11 +1,94 @@
 #include "NodeLinkedList.h"
+/*
+void* copyDataToNode(void* data, Types type)
+{
+	switch(type)
+	{
+		case UINT8:
+		case CHAR:
+			uint8_t* p = (uint8_t* )malloc(sizeof(uint8_t));
+			*p = *(uint8_t *)data;
+			break;
+		case UINT16:
+			uint16_t *p = (uint16_t* )malloc(sizeof(uint16_t));
+			*p = *(uint16_t *)data;
+			break;
+		case UINT32:
+			uint32_t *p = (uint32_t* )malloc(sizeof(uint32_t));
+			*p = *(uint32_t *)data;
+			break;
+		case UINT64:
+			uint64_t *p = (uint64_t* )malloc(sizeof(uint64_t));
+			*p = *(uint16_t *)data;
+			break;
+		case INT8:
+			int8_t *p = (int8_t* )malloc(sizeof(int8_t));
+			*p = *(int8_t *)data; 
+			break;
+		case INT16:
+			int16_t *p = (int16_t* )malloc(sizeof(int16_t));
+			*p = *(int16_t *)data;
+			break;
+		case INT32:
+			int32_t *p = (int32_t* )malloc(sizeof(int32_t));
+			*p = *(uint32_t *)data;
+			break;
+		case INT64:
+			int64_t *p = (int64_t* )malloc(sizeof(int64_t));
+			*p = *(uint64_t *)data;
+			break;
+		case FLOAT:
+			float *p = (float* )malloc(sizeof(float));
+			*p = *(float *)data;
+			break;
+		case DOUBLE:
+			double* p = (double* )malloc(sizeof(double));
+			*p = *(double *)data;
+			break;
+		case LONGDOUBLE:
+			long double* p = (double* )malloc(sizeof(long double));
+			*p = *(long double *)data;
+			break;		
+	}
 
+	return p;
+}
+
+Types obtainDataType(void* data)
+{
+	int64_t intValue = *(int64_t* )data;
+	double doubleValue = *(double *)data;
+	Type t = UINT8_T;
+
+	if(intValue == doubleValue)
+	{
+		if(intValue < DFT_MAX_U8)
+			return UINT8;
+		else if(intValue < DFT_MAX_U16)
+			return UINT16;
+		else if(intValue < DFT_MAX_U32)
+			return UINT32;
+		else if(intValue < DFT_MAX_U64)
+			return UINT64;
+	}
+	else
+	{
+		if(doubleValue < DFT_MAX_FLOAT)
+			return FLOAT;
+		else if(doubleValue < DFT_MAX_DOUBLE)
+			return DOUBLE;
+		else
+			return LONGDOUBLE;
+	}
+}
+*/
 Node* createNode(int* data)
 {
 	Node *node = (Node *)malloc(sizeof(Node));
 	node->previous = NULL;
 	node->next = NULL;
-	node->data = *data;
+	//node->dataType = obtainDataType(void* data);
+	node->data = *data;//copyDataToNode(data,node->dataType);	
 	
 	return node;
 }
@@ -20,6 +103,23 @@ int destroyNode(Node* node)
 
 	return data;
 }
+
+/*
+int getDataNode(Node* node)
+{
+	return node->data;
+}
+
+Node* getPreviousNode(Node* node)
+{
+	return (Node*)PREVIOUS(node);
+}
+
+Node* getNextNode(Node* node)
+{
+	return (Node*)NEXT(node);
+}
+*/
 
 void addNewNodeNext(Node* last, Node* newLast)
 {
@@ -61,6 +161,7 @@ void swapValueNodes(int* n1, int* n2)
 	
 void freeNodeLinkedList(Node* node)
 {
+	//DATA(node) = NULL;
 	NEXT(node) = NULL;
 	PREVIOUS(node) = NULL;
 

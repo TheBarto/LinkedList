@@ -112,6 +112,13 @@ uint8_t* getInt8ArrayFromList(LinkedList* list)
 	return array;
 }
 
+/*
+uint32_t getNElems(LinkedList* list)
+{
+	return NELEMS(list);
+}
+*/
+
 uint32_t getLinkedListElem(LinkedList* list, uint32_t position)
 {
 	uint32_t i = DFT_CERO_U32;
