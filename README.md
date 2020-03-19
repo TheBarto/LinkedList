@@ -1,2 +1,2 @@
 # LinkedList
-Proyect that contains a complete LinkedList struct
+Repository that contains a complete LinkedList struct
