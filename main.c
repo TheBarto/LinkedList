@@ -86,21 +86,21 @@ int main(int argc, char* arv[])
 	
 	free(array);
 
-	linkedListBubbleSort(l);
+	linkedListBubbleSort(l,compareLinkedListIntsNumericValues);
 
 	for(i = 0; i < getNElems(l); i++)
 		printf("Value obtained from list order by bublesort is: %d\n",getLinkedListElem(l,i));		
 
 	printf("///////////////////////////\n");
 
-	linkedListMergeSort(l2,0,getNElems(l2)-1);
+	linkedListMergeSort(l2,0,getNElems(l2)-1,compareLinkedListIntsNumericValues);
 
 	for(i = 0; i < getNElems(l2); i++)
 		printf("Value obtained from list2 order by mergesort is: %d\n",getLinkedListElem(l2,i));		
 
 	printf("///////////////////////////\n");	
 
-	linkedListQuickSort(l3,0,getNElems(l3)-1);
+	linkedListQuickSort(l3,0,getNElems(l3)-1, linkedListPivote, compareLinkedListIntNumericValue);
 
 	for(i = 0; i < getNElems(l3); i++)
 		printf("Value obtained from list3 order by QuickSort is: %d\n",getLinkedListElem(l3,i));		
