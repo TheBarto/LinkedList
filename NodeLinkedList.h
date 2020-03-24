@@ -33,7 +33,9 @@ void addNewNodeNext(Node* last, Node* newLast);
 void addNewNode(Node* node, Node* newNode);
 int deleteNode(Node* node);
 void swapValueNodes(int* n1, int* n2);
+void swapNodes(Node* n1, Node* n2);
 void freeNodeLinkedList(Node* node);
+void moveNode(Node* n1, Node* n2);
 /*void* copyDataToNode(void* data, Types type);
 Types obtainDataType(void* data);*/
 

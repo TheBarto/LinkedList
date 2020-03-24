@@ -158,6 +158,24 @@ void swapValueNodes(int* n1, int* n2)
 
 	return;
 }
+
+void swapNodes(Node* n1, Node* n2)
+{
+	PREVIOUS(NEXT(n2)) = n1;
+	NEXT(PREVIOUS(n2)) = n1;
+	PREVIOUS(NEXT(n1)) = n2;
+	NEXT(PREVIOUS(n1)) = n2;
+
+	Node* n = PREVIOUS(n2);
+	PREVIOUS(n2) = PREVIOUS(n1);
+	PREVIOUS(n1) = n;
+
+	n = NEXT(n2);
+	NEXT(n2) = NEXT(n1);
+	NEXT(n1) = n;	
+
+	return;
+}
 	
 void freeNodeLinkedList(Node* node)
 {
@@ -167,4 +185,24 @@ void freeNodeLinkedList(Node* node)
 
 	free(node);
 	node = NULL;	
+}
+
+void moveNode(Node* n1, Node* n2)
+{    
+    
+    if(NEXT(n2) != NULL)
+        PREVIOUS(NEXT(n2)) = PREVIOUS(n2);
+    
+    if(PREVIOUS(n2) != NULL)
+        NEXT(PREVIOUS(n2)) = NEXT(n2);
+    
+     if(PREVIOUS(n1) != NULL)
+        NEXT(PREVIOUS(n1)) = n2;
+    
+    PREVIOUS(n2) = PREVIOUS(n1);
+    PREVIOUS(n1) = n2;
+    
+    NEXT(n2) = n1;
+
+    return;
 }

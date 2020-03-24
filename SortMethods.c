@@ -1,19 +1,19 @@
-#include "LinkedList.h"
+#include "SortMethods.h"
 
 void linkedListBubbleSort(LinkedList* l)
 {
-	uint8_t flag = TRUE_U8;
+	uint8_t flag = TRUE;
 	uint32_t i = getNElems(l);
 	
-	while(i > 0 && flag == TRUE_U8)
+	while(i > 0 && flag == TRUE)
 	{
-		flag = FALSE_U8;
-		for(uint32_t j = DFT_CERO_U32; j < i -1; j++)
+		flag = FALSE;
+		for(uint32_t j = DFT_CERO_U32; j < i-1; j++)
 		{
 			if(getLinkedListElem(l,j) > getLinkedListElem(l,j+1))
 			{
-				swapLinkedListNodes(j,j+1);
-				flag = TRUE_U8;
+				swapLinkedListValueNodes(l,j,(j+1));
+				flag = TRUE;
 			}
 		}
 		i--;
@@ -21,7 +21,7 @@ void linkedListBubbleSort(LinkedList* l)
 	return;
 }
 
-void linkedListMergeSort(LinkedList* l)
+uint8_t linkedListMergeSort(LinkedList* l, uint32_t P, uint32_t U)
 {
 	if(P > U)
 		return ERR;
@@ -29,32 +29,35 @@ void linkedListMergeSort(LinkedList* l)
 		return OK;
 	else
 	{
-		linkedListMergeSort(l,P,(P+U)/2);
-		linkedListMergeSort(l,((P+U)/2)+1,U);
+		linkedListMergeSort(l,P,((P+U)/2));
+		linkedListMergeSort(l,(((P+U)/2)+1),U);
 	}
-	return linkedListCombinar(l,P,M,U);
+	linkedListCombinar(l,P,((P+U)/2),U);
+	return OK;
 }
 
-void linkedListCobinar(LinkedList* l, uint32_t P, uint32_t M, uint32_t U)
+void linkedListCombinar(LinkedList* l, uint32_t P, uint32_t M, uint32_t U)
 {
 	uint32_t i = P, j = M+1;
 
 	while(i <= M && j<=U)
 	{
-		if(getLinkedListElem(l,j) > getLinkedListElem(l,j+1))
+		if(getLinkedListElem(l,i) < getLinkedListElem(l,j))
 		{
-			swapLinkedListNodes(i,j);
-			i++;
+			i++;	
 		}
 		else
 		{
+			changePositionLinkedListNode(l,i,j);
 			j++;
+			M++;
 		}
 	}
+
 	return;
 }
 
-void linkedListQuickSort(LinkedList* l, uint32_t P, uint32_t U)
+uint8_t linkedListQuickSort(LinkedList* l, int32_t P, int32_t U)
 {
 	if(P > U)
 		return ERR;
@@ -72,24 +75,30 @@ void linkedListQuickSort(LinkedList* l, uint32_t P, uint32_t U)
 	return OK;
 }
 
-uint32_t linkedListSplit(LinkedList* l, uint32_t P, uint32_t U)
+uint32_t linkedListSplit(LinkedList* l, int32_t P, int32_t U)
 {
 	uint32_t M = linkedListPivote(l,P,U);
 	uint32_t k = getLinkedListElem(l,M);
-	swapLinkedListNodes(P,M);
+	swapLinkedListValueNodes(l,P,M);
 	M = P;
-	for(uint32_t i = P+1; i < U; i++)
+	for(uint32_t i = P+1; i <= U; i++)
 	{
 		if(getLinkedListElem(l,i) < k)
 		{
 			M++;
-			swapLinkedListNodes(i,M);
+			swapLinkedListValueNodes(l,i,M);
 		}
 	}
-	swapLinkedListNodes(P,M);
+	swapLinkedListValueNodes(l,P,M);
 	return M;	
 }
 
+uint32_t linkedListPivote(LinkedList* l, int32_t P, int32_t U)
+{
+	return P;
+}
+
+/*
 void linkedListHeapSort(LinkedList* l)
 {
 	linkedListCreateHeap(l);
@@ -106,3 +115,4 @@ void linkedListCreateHeap(LinkedList* l)
 		linkedListHeapify(l,NELEMS(l),i);
 	}
 }
+*/

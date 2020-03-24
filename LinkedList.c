@@ -137,6 +137,20 @@ void swapLinkedListNodes(LinkedList* list, uint32_t swapPosition1, uint32_t swap
 	for(;i<swapPosition1;i++,n1=NEXT(n1));
 	for(i=0;i<swapPosition2;i++,n2=NEXT(n2));
 
+	swapNodes(n1,n2);
+	
+	return;
+}
+
+void swapLinkedListValueNodes(LinkedList* list, uint32_t swapPosition1, uint32_t swapPosition2)
+{
+	uint32_t i = 0;
+	Node* n1 = FIRST(list);
+	Node* n2 = FIRST(list);
+
+	for(;i<swapPosition1;i++,n1=NEXT(n1));
+	for(i=0;i<swapPosition2;i++,n2=NEXT(n2));
+
 	swapValueNodes(&n1->data,&n2->data);
 	
 	return;
@@ -170,4 +184,24 @@ void deleteLinkedList(LinkedList* list)
 	freeNodeLinkedList(n);
 	free(list);
 	list = NULL;
+}
+
+void changePositionLinkedListNode(LinkedList* list, uint32_t nodePosition, uint32_t newPosition)
+{
+        uint32_t i = 0;
+	Node* n1 = FIRST(list);
+	Node* n2 = FIRST(list);
+
+	for(;i<nodePosition;i++,n1=NEXT(n1));
+	for(i=0;i<newPosition;i++,n2=NEXT(n2));
+        
+        if(NEXT(n1) == NULL)
+            LAST(list) = n2;
+        
+        if(PREVIOUS(n1) == NULL)
+            FIRST(list) = n2;
+        
+        moveNode(n1, n2);
+        
+        return;
 }

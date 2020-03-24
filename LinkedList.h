@@ -32,9 +32,11 @@ uint16_t* getInt16ArrayFromList(LinkedList* l);
 uint8_t* getInt8ArrayFromList(LinkedList* l);
 //uint32_t getNElems(LinkedList* l);
 LinkedList* duplicateLinkedList(LinkedList* l);
-void swapLinkedListNodes(LinkedList* l, uint32_t swapPosition1, uint32_t swapPosition2);
+void swapLinkedListValueNodes(LinkedList* l, uint32_t swapPosition1, uint32_t swapPosition2);
+void swapLinkedListNodes(LinkedList* list, uint32_t swapPosition1, uint32_t swapPosition2);
 uint32_t getLinkedListElem(LinkedList* l,uint32_t position);
 void deleteLinkedList(LinkedList* l);
+void changePositionLinkedListNode(LinkedList* list, uint32_t nodePosition, uint32_t newPosition);
 
 #endif
 

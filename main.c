@@ -1,4 +1,5 @@
 #include "LinkedList.h"
+#include "SortMethods.h"
 #include <stdio.h>
 
 int main(int argc, char* arv[])
@@ -45,7 +46,7 @@ int main(int argc, char* arv[])
 
 	printf("///////////////////////////\n");
 
-	swapLinkedListNodes(l, 0, 10);
+	swapLinkedListValueNodes(l, 0, 10);
 
 	for(i = 0; i < getNElems(l); i++)
 		printf("Value obtained from list is: %d\n",getLinkedListElem(l,i));	
@@ -64,11 +65,17 @@ int main(int argc, char* arv[])
 	printf("///////////////////////////\n");	
 
 	LinkedList* l2 = duplicateLinkedList(l);
+	LinkedList* l3 = duplicateLinkedList(l);
 
 	for(i = 0; i < getNElems(l2); i++)
 		printf("Value obtained from list2 is: %d\n",getLinkedListElem(l2,i));	
 
 	printf("///////////////////////////\n");
+
+	for(i = 0; i < getNElems(l2); i++)
+		printf("Value obtained from list3 is: %d\n",getLinkedListElem(l3,i));	
+
+	printf("///////////////////////////\n");	
 
 	uint32_t* array = getInt32ArrayFromList(l);		
 
@@ -78,6 +85,29 @@ int main(int argc, char* arv[])
 	printf("///////////////////////////\n");	
 	
 	free(array);
+
+	linkedListBubbleSort(l);
+
+	for(i = 0; i < getNElems(l); i++)
+		printf("Value obtained from list order by bublesort is: %d\n",getLinkedListElem(l,i));		
+
+	printf("///////////////////////////\n");
+
+	linkedListMergeSort(l2,0,getNElems(l2)-1);
+
+	for(i = 0; i < getNElems(l2); i++)
+		printf("Value obtained from list2 order by mergesort is: %d\n",getLinkedListElem(l2,i));		
+
+	printf("///////////////////////////\n");	
+
+	linkedListQuickSort(l3,0,getNElems(l3)-1);
+
+	for(i = 0; i < getNElems(l3); i++)
+		printf("Value obtained from list3 order by QuickSort is: %d\n",getLinkedListElem(l3,i));		
+
+	printf("///////////////////////////\n");		
+
 	deleteLinkedList(l);
 	deleteLinkedList(l2);
+	deleteLinkedList(l3);
 }
