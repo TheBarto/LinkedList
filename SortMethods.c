@@ -97,22 +97,3 @@ uint32_t linkedListPivote(LinkedList* l, int32_t P, int32_t U)
 {
 	return P;
 }
-
-/*
-void linkedListHeapSort(LinkedList* l)
-{
-	linkedListCreateHeap(l);
-	linkedListSortHeap(l);
-}
-
-void linkedListCreateHeap(LinkedList* l)
-{
-	if(NELEMS(l) < 2)
-		return;
-
-	for(uint32_t i = (NELEMS(l)-2)/2; i > 0; i--)
-	{
-		linkedListHeapify(l,NELEMS(l),i);
-	}
-}
-*/

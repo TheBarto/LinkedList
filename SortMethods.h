@@ -1,3 +1,6 @@
+#ifndef SORTMETHODS_H
+#define SORTMETHODS_H 
+
 #include "LinkedList.h"
 #include "defines.h"
 
@@ -8,3 +11,4 @@ uint8_t linkedListQuickSort(LinkedList* l, int32_t P, int32_t U);
 uint32_t linkedListSplit(LinkedList* l, int32_t P, int32_t U);
 uint32_t linkedListPivote(LinkedList* l, int32_t P, int32_t U);
 
+#endif

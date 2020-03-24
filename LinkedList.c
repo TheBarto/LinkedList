@@ -112,13 +112,6 @@ uint8_t* getInt8ArrayFromList(LinkedList* list)
 	return array;
 }
 
-/*
-uint32_t getNElems(LinkedList* list)
-{
-	return NELEMS(list);
-}
-*/
-
 uint32_t getLinkedListElem(LinkedList* list, uint32_t position)
 {
 	uint32_t i = DFT_CERO_U32;
@@ -188,20 +181,20 @@ void deleteLinkedList(LinkedList* list)
 
 void changePositionLinkedListNode(LinkedList* list, uint32_t nodePosition, uint32_t newPosition)
 {
-        uint32_t i = 0;
+	uint32_t i = 0;
 	Node* n1 = FIRST(list);
 	Node* n2 = FIRST(list);
 
 	for(;i<nodePosition;i++,n1=NEXT(n1));
 	for(i=0;i<newPosition;i++,n2=NEXT(n2));
         
-        if(NEXT(n1) == NULL)
-            LAST(list) = n2;
+    if(NEXT(n1) == NULL)
+        LAST(list) = n2;
         
-        if(PREVIOUS(n1) == NULL)
-            FIRST(list) = n2;
+    if(PREVIOUS(n1) == NULL)
+        FIRST(list) = n2;
         
-        moveNode(n1, n2);
+    moveNode(n1, n2);
         
-        return;
+    return;
 }
