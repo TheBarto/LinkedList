@@ -5,7 +5,7 @@
 #include "defines.h"
 
 typedef int8_t (compareFunction)(LinkedList*, uint32_t, uint32_t);
-typedef uint32_t(pivotFunction)(LinkedList*, int32_t, int32_t);
+typedef uint32_t (pivotFunction)(LinkedList*, int32_t, int32_t);
 
 int8_t compareLinkedListIntsNumericValues(LinkedList* l, uint32_t i, uint32_t j);
 int8_t compareLinkedListIntNumericValue(LinkedList* l, uint32_t i, uint32_t value);

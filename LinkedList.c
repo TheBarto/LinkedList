@@ -1,16 +1,92 @@
 #include "LinkedList.h"
 
+Node* createNode(void* data)
+{
+	Node *node = (Node *)malloc(sizeof(Node));
+	PREVIOUS(node) = NULL;
+	NEXT(node) = NULL;
+	DATA(node) = data;	
+	
+	return node;
+}
+
+Node* createNodeDeepCopy(void* data, userCopyFunction function)
+{
+	Node *node = (Node *)malloc(sizeof(Node));
+	PREVIOUS(node) = NULL;
+	NEXT(node) = NULL;
+	DATA(node) = function(data);
+
+	return node;
+}
+
+void addNewNode(Node* node, Node* newNode)
+{
+	NEXT(newNode) = NEXT(node);
+	PREVIOUS(newNode) = (struct Node*)node;
+
+	if(NEXT(newNode))
+		PREVIOUS(NEXT(newNode)) = (struct Node*)newNode;
+	NEXT(node) = (struct Node*)newNode;
+
+	return;
+}
+
+/* ELIMINA UN NODO DE LA LISTA Y REAJUSTA PUNTEROS */
+void* deleteNode(Node* node)
+{
+	if(NEXT(node) != NULL)
+		PREVIOUS(NEXT(node)) = PREVIOUS(node);
+	if(PREVIOUS(node) != NULL)
+		NEXT(PREVIOUS(node)) = NEXT(node);
+	
+	PREVIOUS(node) = NULL;
+	NEXT(node) = NULL;
+	void* data = DATA(node);
+	free(node);
+	node = NULL;
+
+	return data;
+}
+
+/* ELIMINA UN NODO LIBERANDOLO */
+void freeNodeLinkedList(Node* node)
+{
+	NEXT(node) = NULL;
+	PREVIOUS(node) = NULL;
+
+	free(node);
+	node = NULL;	
+}
+
+/* ELIMINA UN NODO LIBERANDOLO */
+void freeDeepCopyNodeLinkedList(Node* node)
+{
+	NEXT(node) = NULL;
+	PREVIOUS(node) = NULL;
+
+	free(DATA(node));
+	DATA(node) = NULL;
+	free(node);
+	node = NULL;	
+}
+
+
+/* CREA UNA LISTA */
 LinkedList* createLinkedList()
 {
 	LinkedList* l = (LinkedList *)malloc(sizeof(LinkedList));
-	NELEMS(l) = DFT_CERO_U32;
+	INFO(l) = (uint32_t *)malloc(sizeof(uint32_t));
+	resetNElems(l);
+	//NELEMS(l) = 0;
 	FIRST(l) = NULL;
 	LAST(l) = NULL;
 
 	return l;
 }
 
-void appendElem(LinkedList* list, int* data)
+/* ANADE UN ELEMENTO A LA LISTA */
+void appendElem(LinkedList* list, void* data)
 {
 	if(!LAST(list))
 	{
@@ -20,107 +96,104 @@ void appendElem(LinkedList* list, int* data)
 	else
 	{
 		Node* node = createNode(data);
-		addNewNodeNext(LAST(list), node);
+		addNewNode(LAST(list), node);
 		LAST(list) = node;
-		
 	}
 
-	NELEMS(list)++;
+	increaseCounter(list);
 	return;
 }
 
-void appendElemIndex(LinkedList* list, int* data, uint32_t pos)
+/* ANADE UN ELEMENTO A LA LISTA EN LA POSICION INDICADA */
+void appendElemIndex(LinkedList* list, void* data, uint32_t pos)
 {
 	uint32_t i = DFT_CERO_U32;
 	Node* node = FIRST(list);
 	for(; i < (pos-1); i++, node = getNextNode(node));
 	
 	addNewNode(node, createNode(data));
-	NELEMS(list)++;
+	increaseCounter(list);
+
+	return;
 }
 
-int popElem(LinkedList* list)
+/* AÑADE UN ELEMENTO A LA LISTA COPIANDO EL ELEMENTO */
+void appendElemDeepCopy(LinkedList* list, void* data, userCopyFunction function)
 {
-	NELEMS(list)--;
+	if(!LAST(list))
+	{
+		FIRST(list) = createNodeDeepCopy(data, function);
+		LAST(list) = FIRST(list);
+	}
+	else
+	{
+		Node* node = createNodeDeepCopy(data, function);
+		addNewNode(LAST(list), node);
+		LAST(list) = node;
+	}
+
+	increaseCounter(list);
+	return;
+}
+
+/* ANADE UN ELEMENTO A LA LISTA EN LA POSICION INDICADA COPIANDO EL ELEMENTO */
+void appendElemIndexDeepCopy(LinkedList* list, void* data, uint32_t pos, userCopyFunction function)
+{
+	uint32_t i = DFT_CERO_U32;
+	Node* node = FIRST(list);
+	for(; i < (pos-1); i++, node = getNextNode(node));
+	
+	addNewNode(node, createNodeDeepCopy(data, function));
+	increaseCounter(list);
+
+	return;
+}
+
+/* EXTRAE UN ELEMENTO */
+void* popElem(LinkedList* list)
+{
+	decreaseCounter(list);
 	LAST(list) = PREVIOUS(LAST(list));
 	
 	return deleteNode((NEXT(LAST(list))));
 }
 
-int popElemIndex(LinkedList* list, uint32_t posElem)
+/* EXTRAE UN ELEMENTO EN LA POSICION INDICADA */
+void* popElemIndex(LinkedList* list, uint32_t posElem)
 {
-	NELEMS(list)--;
+	decreaseCounter(list);
 	uint32_t i = DFT_CERO_U32;
 	Node* node = NULL;
 	for(node = FIRST(list); i < (posElem); i++, node = getNextNode(node));
 
 	if(posElem == 0)
 		FIRST(list) = NEXT(FIRST(list));
-	if(posElem == NELEMS(list))
+	if(posElem == getNElems(list))
 		LAST(list) = PREVIOUS(LAST(list));
 	
 	return deleteNode(node);
 }
 
+/* COMPRUEBA SI ESTA VACIA */
 bool isEmpty(LinkedList* list)
 {
-	if(NELEMS(list) == DFT_CERO_U32)
+	if(getNElems(list) == DFT_CERO_U32)
 		return TRUE;
 
 	return FALSE;
 }
 
-uint32_t* getInt32ArrayFromList(LinkedList* list)
-{
-	uint32_t* array = (uint32_t*)malloc(NELEMS(list)*sizeof(array));
-	uint32_t i = DFT_CERO_U32;
-	Node* node = FIRST(list);
-
-	for(; i < NELEMS(list); i++, node = getNextNode(node))
-	{
-		*(array + i) = getDataNode(node);
-	}
-
-	return array;
-}
-
-uint16_t* getInt16ArrayFromList(LinkedList* list)
-{
-	uint16_t* array = (uint16_t*)malloc(NELEMS(list)*sizeof(array));
-	uint32_t i = DFT_CERO_U32;
-	Node* node = FIRST(list);
-
-	for(; i < NELEMS(list); i++, node = getNextNode(node))
-	{
-		*(array + i) = *(uint16_t *)getDataNode(node);
-	}
-
-	return array;
-}
-
-uint8_t* getInt8ArrayFromList(LinkedList* list)
-{
-	uint8_t* array = (uint8_t*)malloc(NELEMS(list)*sizeof(array));
-	uint32_t i = DFT_CERO_U32;
-	Node* node = FIRST(list);
-
-	for(; i < NELEMS(list); i++, node = getNextNode(node))
-	{
-		*(array + i) = *(uint8_t *)getDataNode(node);
-	}
-
-	return array;
-}
-
-uint32_t getLinkedListElem(LinkedList* list, uint32_t position)
+/* DEVUELVE UN ELEMENTO DE LA LISTA */
+void* getLinkedListElem(LinkedList* list, uint32_t position)
 {
 	uint32_t i = DFT_CERO_U32;
 	Node* n = FIRST(list);
 	for(; i < position; i++, n = getNextNode(n));
 
-	return n->data;
+	return getDataNode(n);
 }
 
+/* INTERCAMBIA LOS NODOS */
 void swapLinkedListNodes(LinkedList* list, uint32_t swapPosition1, uint32_t swapPosition2)
 {
 	uint32_t i = 0;
@@ -130,11 +203,23 @@ void swapLinkedListNodes(LinkedList* list, uint32_t swapPosition1, uint32_t swap
 	for(;i<swapPosition1;i++,n1=NEXT(n1));
 	for(i=0;i<swapPosition2;i++,n2=NEXT(n2));
 
-	swapNodes(n1,n2);
+	PREVIOUS(NEXT(n2)) = n1;
+	NEXT(PREVIOUS(n2)) = n1;
+	PREVIOUS(NEXT(n1)) = n2;
+	NEXT(PREVIOUS(n1)) = n2;
+
+	Node* n = PREVIOUS(n2);
+	PREVIOUS(n2) = PREVIOUS(n1);
+	PREVIOUS(n1) = n;
+
+	n = NEXT(n2);
+	NEXT(n2) = NEXT(n1);
+	NEXT(n1) = n;
 	
 	return;
 }
 
+/* INTERCAMBIA EL CONTENIDO DE LOS NODOS */
 void swapLinkedListValueNodes(LinkedList* list, uint32_t swapPosition1, uint32_t swapPosition2)
 {
 	uint32_t i = 0;
@@ -144,24 +229,41 @@ void swapLinkedListValueNodes(LinkedList* list, uint32_t swapPosition1, uint32_t
 	for(;i<swapPosition1;i++,n1=NEXT(n1));
 	for(i=0;i<swapPosition2;i++,n2=NEXT(n2));
 
-	swapValueNodes(&n1->data,&n2->data);
+	void* p = DATA(n1);
+	DATA(n1) = DATA(n2);
+	DATA(n2) = p;
 	
 	return;
 }
 
+/* CREA UNA LISTA CON PUNTEROS SHALLOW, NO DEEP */
 LinkedList* duplicateLinkedList(LinkedList* list)
 {
 	LinkedList* listNew = createLinkedList();
 	uint32_t i = 0;	
 
-	for(; i < NELEMS(list); i++){
-		int32_t value = getLinkedListElem(list,i);
-		appendElem(listNew, &value);
+	for(; i < getNElems(list); i++){
+		void* value = getLinkedListElem(list,i);
+		appendElem(listNew, value);
 	}
 	
 	return listNew;
 }
 
+LinkedList* duplicateDeepCopyLinkedList(LinkedList* list, userCopyFunction function)
+{
+	LinkedList* listNew = createLinkedList();
+	uint32_t i = 0;	
+
+	for(; i < getNElems(list); i++){
+		void* value = getLinkedListElem(list,i);
+		appendElemDeepCopy(listNew, value, function);
+	}
+	
+	return listNew;
+}
+
+/* ELIMINA LA LISTA */
 void deleteLinkedList(LinkedList* list)
 {
 	Node* n = FIRST(list);
@@ -175,11 +277,35 @@ void deleteLinkedList(LinkedList* list)
 	}	
 
 	freeNodeLinkedList(n);
+
+	free(INFO(list));
+	INFO(list) = NULL;
 	free(list);
 	list = NULL;
 }
 
-void changePositionLinkedListNode(LinkedList* list, uint32_t nodePosition, uint32_t newPosition)
+void deleteDeepCopyLinkedList(LinkedList* list)
+{
+	Node* n = FIRST(list);
+	Node* n2 = NEXT(FIRST(list));	
+
+	while(n2)
+	{
+		freeDeepCopyNodeLinkedList(n);
+		n = n2;
+		n2 = NEXT(n2);
+	}	
+
+	freeDeepCopyNodeLinkedList(n);
+
+	free(INFO(list));
+	INFO(list) = NULL;
+	free(list);
+	list = NULL;
+}
+
+/* CAMBIA LA POSICION DE UN NODO */
+void changePositionNodeLinkedList(LinkedList* list, uint32_t nodePosition, uint32_t newPosition)
 {
 	uint32_t i = 0;
 	Node* n1 = FIRST(list);
@@ -194,7 +320,27 @@ void changePositionLinkedListNode(LinkedList* list, uint32_t nodePosition, uint3
     if(PREVIOUS(n1) == NULL)
         FIRST(list) = n2;
         
-    moveNode(n1, n2);
+    if(NEXT(n2) != NULL)
+        PREVIOUS(NEXT(n2)) = PREVIOUS(n2);
+    
+    if(PREVIOUS(n2) != NULL)
+        NEXT(PREVIOUS(n2)) = NEXT(n2);
+    
+     if(PREVIOUS(n1) != NULL)
+        NEXT(PREVIOUS(n1)) = n2;
+    
+    PREVIOUS(n2) = PREVIOUS(n1);
+    PREVIOUS(n1) = n2;
+    
+    NEXT(n2) = n1;
         
     return;
+}
+
+void* deepCopyInt32Value(void* data)
+{
+	int32_t* value = (int32_t*)malloc(sizeof(int32_t));
+	*value = *(int32_t *)data;
+
+	return value;
 }

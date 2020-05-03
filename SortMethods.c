@@ -48,7 +48,7 @@ void linkedListCombinar(LinkedList* l, uint32_t P, uint32_t M, uint32_t U, compa
 		}
 		else
 		{
-			changePositionLinkedListNode(l,i,j);
+			changePositionNodeLinkedList(l,i,j);
 			j++;
 			M++;
 		}
@@ -78,7 +78,7 @@ uint8_t linkedListQuickSort(LinkedList* l, int32_t P, int32_t U, pivotFunction p
 uint32_t linkedListSplit(LinkedList* l, int32_t P, int32_t U, pivotFunction pFunction, compareFunction cFunction)
 {
 	uint32_t M = pFunction(l,P,U);
-	uint32_t k = getLinkedListElem(l,M);
+	uint32_t k = *(uint32_t*)getLinkedListElem(l,M);
 	swapLinkedListValueNodes(l,P,M);
 	M = P;
 	for(uint32_t i = P+1; i <= U; i++)
@@ -100,9 +100,9 @@ uint32_t linkedListPivote(LinkedList* l, int32_t P, int32_t U)
 
 int8_t compareLinkedListIntsNumericValues(LinkedList* l, uint32_t i, uint32_t j)
 {
-	if(getLinkedListElem(l,i) > getLinkedListElem(l,j))
+	if(*(uint32_t *)getLinkedListElem(l,i) > *(uint32_t *)getLinkedListElem(l,j))
 		return 1;
-	else if(getLinkedListElem(l,i) < getLinkedListElem(l,j))
+	else if(*(uint32_t *)getLinkedListElem(l,i) < *(uint32_t *)getLinkedListElem(l,j))
 		return -1;
 	else
 		return 0;
@@ -110,9 +110,9 @@ int8_t compareLinkedListIntsNumericValues(LinkedList* l, uint32_t i, uint32_t j)
 
 int8_t compareLinkedListIntNumericValue(LinkedList* l, uint32_t i, uint32_t value)
 {
-	if(getLinkedListElem(l,i) > value)
+	if(*(uint32_t *)getLinkedListElem(l,i) > value)
 		return 1;
-	else if(getLinkedListElem(l,i) < value)
+	else if(*(uint32_t *)getLinkedListElem(l,i) < value)
 		return -1;
 	else
 		return 0;

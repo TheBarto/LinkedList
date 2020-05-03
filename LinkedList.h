@@ -1,42 +1,71 @@
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H 
+#ifndef NODELINKEDLIST_H
+#define NODELINKEDLIST_H 
 
-#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "NodeLinkedList.h"
+#include "defines.h"
 
-struct LinkedList
+struct Node
 {
-	uint32_t nElems;
-	Node* first;
-	Node* last;
+	void* data;
+	struct Node* next;
+	struct Node* previous;
 };
 
-typedef struct LinkedList LinkedList;
+typedef struct Node Node;
+typedef struct Node LinkedList;
 
-#define FIRST(l) l->first
-#define LAST(l) l->last
-#define NELEMS(l) l->nElems
+typedef void* (userCopyFunction)(void *data);
 
-#define getNElems(l) (NELEMS(l))
+/* ---- NODE DEFINES ---- */
+#define NEXT(n) n->next
+#define PREVIOUS(n) n->previous
+#define DATA(n) n->data
+
+/* ---- LIST DEFINES ---- */
+#define FIRST(l) NEXT(l)
+#define LAST(l) PREVIOUS(l)
+#define INFO(l) (DATA(l))
+
+
+/* ---- GET NODE FUNCTIONS ---- */
+#define getDataNode(node) (DATA(node))
+#define getPreviousNode(node) (PREVIOUS(node))
+#define getNextNode(node) (NEXT(node))
+
+#define increaseCounter(l) ((*(uint32_t *)INFO(l))++)
+#define decreaseCounter(l) ((*(uint32_t *)INFO(l))--)
+
+#define getNElems(l) ((*(uint32_t *)INFO(l)))
+#define resetNElems(l) ((*(uint32_t *)INFO(l)) = 0)
+
+Node* createNode(void* data);
+Node* createNodeCopyData(void* data, Types type);
+Node* createNodeUserCopyData(void* data, userCopyFunction function);
+void addNewNode(Node* node, Node* newNode);
+void* deleteNode(Node* node);
+//void swapValueNodes(int* n1, int* n2);
+//void swapNodes(Node* n1, Node* n2);
+void freeNodeLinkedList(Node* node);
+void freeDeepCopyNodeLinkedList(Node* node);
+//void moveNode(Node* n1, Node* n2);
 
 LinkedList* createLinkedList();
-void appendElem(LinkedList* list, int* data);
-void appendElemIndex(LinkedList* list, int* data, uint32_t pos);
-int popElem(LinkedList* list);
-int popElemIndex(LinkedList* list, uint32_t posElem);
-bool isEmpty(LinkedList* l);
-uint32_t* getInt32ArrayFromList(LinkedList* l);
-uint16_t* getInt16ArrayFromList(LinkedList* l);
-uint8_t* getInt8ArrayFromList(LinkedList* l);
-//uint32_t getNElems(LinkedList* l);
-LinkedList* duplicateLinkedList(LinkedList* l);
-void swapLinkedListValueNodes(LinkedList* l, uint32_t swapPosition1, uint32_t swapPosition2);
+void appendElem(LinkedList* list, void* data);
+void appendElemIndex(LinkedList* list, void* data, uint32_t pos);
+void appendElemDeepCopy(LinkedList* list, void* data, userCopyFunction function);
+void appendElemIndexDeepCopy(LinkedList* list, void* data, uint32_t pos, userCopyFunction function);
+void* popElem(LinkedList* list);
+void* popElemIndex(LinkedList* list, uint32_t posElem);
+bool isEmpty(LinkedList* list);
+void* getLinkedListElem(LinkedList* list, uint32_t position);
 void swapLinkedListNodes(LinkedList* list, uint32_t swapPosition1, uint32_t swapPosition2);
-uint32_t getLinkedListElem(LinkedList* l,uint32_t position);
-void deleteLinkedList(LinkedList* l);
-void changePositionLinkedListNode(LinkedList* list, uint32_t nodePosition, uint32_t newPosition);
+void swapLinkedListValueNodes(LinkedList* list, uint32_t swapPosition1, uint32_t swapPosition2);
+LinkedList* duplicateLinkedList(LinkedList* list);
+LinkedList* duplicateDeepCopyLinkedList(LinkedList* list, userCopyFunction function);
+void deleteLinkedList(LinkedList* list);
+void deleteDeepCopyLinkedList(LinkedList* list);
+void changePositionNodeLinkedList(LinkedList* list, uint32_t nodePosition, uint32_t newPosition);
 
-#endif
-
+void* deepCopyInt32Value(void* data);
+#endif 
