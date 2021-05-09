@@ -15,4 +15,9 @@ bool isEmpty(Stack* stack);
 Stack* duplicateStack(Stack* stack);
 Stack* duplicateDeepCopyStack(Stack* stack, userCopyFunction function);
 
+void deleteStack(Stack* stack);
+void deleteDeepCopyStack(Stack* stack);
+
+uint32_t getUInt32ArrayWithStackElements(LinkedList* list, uint32_t* array);
+
 #endif

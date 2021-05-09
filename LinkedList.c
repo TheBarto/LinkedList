@@ -344,3 +344,18 @@ void* deepCopyInt32Value(void* data)
 
 	return value;
 }
+
+uint32_t getUInt32ArrayWithListElements(LinkedList* list, uint32_t* array)
+{
+	array = (uint32_t*)malloc(INFO(list)*sizeof(uint32_t));
+	if(!array)
+		return NULL;
+
+	uint32_t pos = 0;
+	for(Node* n = FIRST(list); !n; n = NEXT(n), pos++)
+	{
+		*(array+pos) = DATA(n);
+	}
+
+	return INFO(list);
+}

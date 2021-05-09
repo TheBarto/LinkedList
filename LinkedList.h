@@ -12,6 +12,11 @@ struct Node
 	struct Node* previous;
 };
 
+/* Nota aclaratoria. Ahora la lista enlazada consta de una
+ * sola estructura. El Node que hace de LinkedList tiene un
+ * un puntero al primer elemento(next), un puntero al ultimo
+ * elemento(previous), y el numero de elementos en data */
+
 typedef struct Node Node;
 typedef struct Node LinkedList;
 
@@ -25,7 +30,7 @@ typedef void* (userCopyFunction)(void *data);
 /* ---- LIST DEFINES ---- */
 #define FIRST(l) NEXT(l)
 #define LAST(l) PREVIOUS(l)
-#define INFO(l) (DATA(l))
+#define INFO(l) DATA(l)
 
 
 /* ---- GET NODE FUNCTIONS ---- */
@@ -68,4 +73,5 @@ void deleteDeepCopyLinkedList(LinkedList* list);
 void changePositionNodeLinkedList(LinkedList* list, uint32_t nodePosition, uint32_t newPosition);
 
 void* deepCopyInt32Value(void* data);
+uint32_t getUInt32ArrayWithListElements(LinkedList* list, uint32_t* array);
 #endif 

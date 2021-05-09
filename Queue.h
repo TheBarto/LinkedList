@@ -15,4 +15,7 @@ bool isEmpty(Queue* queue);
 Queue* duplicateQueue(Queue* queue);
 Queue* duplicateDeepCopyQueue(Queue* queue, userCopyFunction function);
 
+void deleteQueue(Queue* queue);
+void deleteDeepCopyQueue(Queue* queue);
+
 #endif

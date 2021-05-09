@@ -2,7 +2,7 @@
 #include "SortMethods.h"
 #include <stdio.h>
 
-int main(int argc, char* arv[])
+int main(int argc, char* argv[])
 {
 
 	LinkedList* l = createLinkedList();
